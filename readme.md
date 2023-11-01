@@ -6,8 +6,10 @@
     <a href="https://github.com/gusye1234/gpt-readme">
       <img src="https://img.shields.io/badge/could_be-Wrong-red">
     </a>
+    <a href="https://pypi.org/project/gpt_readme/">
+      <img src="https://img.shields.io/pypi/v/gpt_readme.svg">
+    </a>
 </div>
-
 
 # gpt_readme
 

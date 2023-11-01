@@ -14,7 +14,7 @@ with open("./gpt_readme/__init__.py") as f:
                 vars2readme[v] = line.split('=')[1]
 
 setuptools.setup(
-    name='gpt-readme',
+    name='gpt_readme',
     url=vars2readme['__url__'],
     version=vars2readme['__version__'],
     author=vars2readme['__author__'],
