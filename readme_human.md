@@ -1,24 +1,14 @@
 <div align="center">
-	<div>
-     <a href="https://github.com/gusye1234/gpt-readme/blob/main/readme_human.md">
-      Check out the human-written readme here
-    </a>
-    <br/>
-    <br/>
-  </div>
-  <div>
     <a href="https://github.com/gusye1234/gpt-readme">
-      <img src="https://img.shields.io/badge/written_by-GPT-green">
+      <img src="https://img.shields.io/badge/written_by-human-green">
     </a>
     <a href="https://github.com/gusye1234/gpt-readme">
-      <img src="https://img.shields.io/badge/could_be-Wrong-red">
+      <img src="https://img.shields.io/badge/maybe-Right-blue">
     </a>
     <a href="https://pypi.org/project/gpt_readme/">
       <img src="https://img.shields.io/pypi/v/gpt_readme.svg">
     </a>
-  </div>
 </div>
-
 
 
 # gpt_readme
@@ -37,21 +27,43 @@ To install the `gpt_readme` module, you can use the following command:
 pip install gpt_readme
 ```
 
-To use the module, you need to provide the necessary command-line arguments. The `main` module in `gpt_readme/__main__.py` serves as the entry point. You can run the module with the following command:
+Or download and install it from source:
 
 ```
-python -m gpt_readme
+git clone https://github.com/gusye1234/gpt-readme.git
+cd gpt-readme
+pip install -e .
 ```
 
-Make sure to configure the necessary environment variables before running the module.
+To use the command line tool, you need to provide the necessary command-line arguments. 
+
+```
+# the command to create this repo's readme
+>> cd gpt_readme
+>> gpt_readme --path="./gpt_readme"
+```
+
+You can check the detail options by
+
+```
+>> gpt_readme -h
+usage: gpt_readme [-h] [--path PATH] [--exts EXTS] [--language LANGUAGE] [--out OUT]
+
+GPT-readme: Use ChatGPT to write README, based on your code.
+
+options:
+  -h, --help           show this help message and exit
+  --path PATH          The local path for your code repo/file
+  --exts EXTS          Select your code extension name, split by comma, e.g. py,cpp
+  --language LANGUAGE  Select your readme language
+  --out OUT            Select where your readme file should be saved
+```
+
+Make sure to configure the necessary environment variables (`OPENAI_API_KEY`)before running the module.
 
 ## Features
 
 The `gpt_readme` module consists of the following files and submodules:
-
-- `gpt_readme/__init__.py`: Defines metadata about the `gpt_readme` library, such as version, author, and URL.
-
-- `gpt_readme/__main__.py`: Serves as the entry point for the `gpt_readme` codebase.
 
 - `gpt_readme/constants.py`: Defines constants and variables used in the codebase, including environment variables, a console object, and mappings between file extensions and programming languages.
 
@@ -69,6 +81,5 @@ The `gpt_readme` module consists of the following files and submodules:
 
 The `gpt_readme` module relies on the following third-party libraries:
 
-- OpenAI GPT-3.5-turbo: A language model used for generating code summaries and documentation.
-
-I would like to express my gratitude to the developers of the OpenAI GPT-3.5-turbo for their contribution to this module.
+- `openai`: OpenAI GPT-3.5-turbo: A language model used for generating code summaries and documentation.
+- `rich`: Rich is a Python library for rich text and beautiful formatting in the terminal.

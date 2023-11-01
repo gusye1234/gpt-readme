@@ -12,7 +12,7 @@ from .prompts import FINAL_PROMPT, SYSTEM_PROMPT
 
 def parse_args():
     parser = argparse.ArgumentParser(
-        description='pept3: Test-time training for deep MS/MS spectrum prediction improves peptide identification'
+        description='GPT-readme: Use ChatGPT to write README, based on your code.'
     )
     parser.add_argument(
         "--path",
@@ -29,7 +29,7 @@ def parse_args():
     parser.add_argument(
         "--language",
         type=str,
-        default="chinese",
+        default="english",
         help='Select your readme language',
     )
     parser.add_argument(
