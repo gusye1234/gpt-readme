@@ -1,7 +1,7 @@
 
 <div align="center">
     <a href="https://github.com/gusye1234/gpt-readme">
-      <img src="https://img.shields.io/badge/written_in-GPT-green">
+      <img src="https://img.shields.io/badge/written_by-GPT-green">
     </a>
     <a href="https://github.com/gusye1234/gpt-readme">
       <img src="https://img.shields.io/badge/could_be-Wrong-red">
@@ -10,7 +10,6 @@
       <img src="https://img.shields.io/pypi/v/gpt_readme.svg">
     </a>
 </div>
-
 
 # gpt_readme
 

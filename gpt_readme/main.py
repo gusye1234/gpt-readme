@@ -83,7 +83,7 @@ def main():
             """
 <div align="center">
     <a href="https://github.com/gusye1234/gpt-readme">
-      <img src="https://img.shields.io/badge/written_in-GPT-green">
+      <img src="https://img.shields.io/badge/written_by-GPT-green">
     </a>
     <a href="https://github.com/gusye1234/gpt-readme">
       <img src="https://img.shields.io/badge/could_be-Wrong-red">

@@ -27,7 +27,7 @@ def prompt_summary(**kwargs):
 
 
 def file_summary(file_path):
-    console.log(f"FILE {file_path}")
+    console.print(f"[bold blue]FILE[/bold blue] {file_path}")
     content = "".join(get_file_content(file_path)).strip()
     language = get_language(file_path)
     summary = prompt_summary(

@@ -34,7 +34,7 @@ def prompt_summary(**kwargs):
 
 
 def dir_summary(path):
-    console.log(f"DIR {path}")
+    console.print(f"[bold green]DIR[/bold green] {path}")
     paths = sorted(list(os.listdir(path)))
     sub_file_summaries = {}
     sub_module_summaries = {}
@@ -55,9 +55,15 @@ def dir_summary(path):
             total_languages.add(result["language"])
     if len(sub_file_summaries) == 0 and len(sub_module_summaries) == 0:
         return {"content": "", "language": ""}
+    language = " ".join(total_languages)
+
+    # fast forward for single file or module
+    if len(sub_file_summaries) == 1 and len(sub_module_summaries) == 0:
+        return {"content": list(sub_file_summaries.values())[0], "language": language}
+    if len(sub_file_summaries) == 0 and len(sub_module_summaries) == 1:
+        return {"content": list(sub_file_summaries.values())[0], "language": language}
     file_summaries = construct_summary_pair(sub_file_summaries)
     module_summaries = construct_summary_pair(sub_module_summaries)
-    language = " ".join(total_languages)
     summary = prompt_summary(
         language=language,
         file_summaries=file_summaries,
