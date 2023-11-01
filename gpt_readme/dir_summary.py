@@ -19,6 +19,7 @@ def prompt_summary(**kwargs):
     response = openai.ChatCompletion.create(
         model="gpt-3.5-turbo",
         messages=construct_prompt(final_system, final_prompt),
+        temperature=0,
         stream=True,
     )
     output = ""
@@ -59,17 +60,26 @@ def dir_summary(path):
 
     # fast forward for single file or module
     if len(sub_file_summaries) == 1 and len(sub_module_summaries) == 0:
-        return {"content": list(sub_file_summaries.values())[0], "language": language}
-    if len(sub_file_summaries) == 0 and len(sub_module_summaries) == 1:
-        return {"content": list(sub_file_summaries.values())[0], "language": language}
-    file_summaries = construct_summary_pair(sub_file_summaries)
-    module_summaries = construct_summary_pair(sub_module_summaries)
-    summary = prompt_summary(
-        language=language,
-        file_summaries=file_summaries,
-        module_summaries=module_summaries,
-        max_length=300,
-        path=path,
-    )
-    console.print(summary)
-    return {"content": summary, "language": language}
+        dir_result = {
+            "content": list(sub_file_summaries.values())[0],
+            "language": language,
+        }
+    elif len(sub_file_summaries) == 0 and len(sub_module_summaries) == 1:
+        dir_result = {
+            "content": list(sub_file_summaries.values())[0],
+            "language": language,
+        }
+    else:
+        console.print(f"[bold green]DIR[/bold green] {path}")
+        file_summaries = construct_summary_pair(sub_file_summaries)
+        module_summaries = construct_summary_pair(sub_module_summaries)
+        summary = prompt_summary(
+            language=language,
+            file_summaries=file_summaries,
+            module_summaries=module_summaries,
+            max_length=300,
+            path=path,
+        )
+        dir_result = {"content": summary, "language": language}
+    console.rule(f"👌 {path}")
+    return dir_result

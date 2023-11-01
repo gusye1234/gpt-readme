@@ -4,7 +4,7 @@ import argparse
 from rich.markdown import Markdown
 from .constants import ext2language, console, scan_exts
 from . import constants
-from .utils import construct_prompt
+from .utils import construct_prompt, get_cache_config, set_cache_config
 from .dir_summary import dir_summary
 from .file_summary import file_summary
 from .prompts import FINAL_PROMPT, SYSTEM_PROMPT
@@ -44,6 +44,12 @@ def parse_args():
         default="./readme.md",
         help='Select where your readme file should be saved',
     )
+    parser.add_argument(
+        "--cache",
+        type=bool,
+        default=True,
+        help='Cache the summary of the code, to speed up the generation of next time. It will leave a .gpt_readme.json file under the path',
+    )
     return parser.parse_args()
 
 
@@ -55,6 +61,7 @@ def prompt_summary(**kwargs):
     response = openai.ChatCompletion.create(
         model="gpt-3.5-turbo",
         messages=construct_prompt(final_system, final_prompt),
+        temperature=0,
     )
     return response['choices'][0]['message']['content']
 
@@ -62,7 +69,10 @@ def prompt_summary(**kwargs):
 def main():
     args = parse_args()
     local_path = os.path.relpath(args.path)
+
     constants.envs['human_language'] = args.language
+    if args.cache:
+        constants.envs['cache'] = get_cache_config(local_path)
     for ext in args.exts.split(","):
         ext = ext.strip()
         if not ext:
@@ -77,6 +87,8 @@ def main():
         summaries = file_summary(local_path)
     else:
         summaries = dir_summary(local_path)
+    if args.cache:
+        set_cache_config(local_path, constants.envs["cache"])
     readme = prompt_summary(
         language=summaries['language'],
         module_summaries=summaries['content'],
