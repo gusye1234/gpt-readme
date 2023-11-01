@@ -11,57 +11,55 @@
     </a>
 </div>
 
+
 # gpt_readme
 
-The `gpt_readme` module is a Python code library that utilizes the OpenAI GPT-3.5 Turbo model to automatically generate README files for code repositories or files. It aims to provide concise summaries of code modules and files, making it easier for developers and users to understand and navigate the codebase.
+The `gpt_readme` module is a code library that generates README files for code repositories or files using the OpenAI GPT-3.5-turbo model. It includes several submodules and files that provide different functionalities for generating code summaries and documentation.
+
+## Introduction
+
+The main functionality of the `gpt_readme` module is to generate README files for code repositories or files. It utilizes the OpenAI GPT-3.5-turbo model to summarize the code and create the README. The generated README includes language-specific summaries of modules and their content, making it useful for automatically generating README files for code projects.
 
 ## Get Started
 
-To install the `gpt_readme` module, follow these steps:
-
-1. Clone the code repository:
+To install the `gpt_readme` module, you can use the following command:
 
 ```
-git clone https://github.com/<username>/gpt_readme.git
+pip install gpt_readme
 ```
 
-2. Install the required dependencies:
-
-```
-pip install -r requirements.txt
-```
-
-3. Set up your OpenAI API key by exporting it as an environment variable:
-
-```
-export OPENAI_API_KEY=<your_api_key>
-```
-
-4. Run the module as a script:
+To use the module, you need to provide the necessary command-line arguments. The `main` module in `gpt_readme/__main__.py` serves as the entry point. You can run the module with the following command:
 
 ```
 python -m gpt_readme
 ```
 
+Make sure to configure the necessary environment variables before running the module.
+
 ## Features
 
-The `gpt_readme` module includes the following files and submodules:
+The `gpt_readme` module consists of the following files and submodules:
 
-- `gpt_readme/__init__.py`: Defines version, author, and URL variables for the module.
-- `gpt_readme/__main__.py`: Serves as the entry point for the module and executes the `main` function when run as a script.
-- `gpt_readme/constants.py`: Defines constants and variables used in the module, including environment variables, a console object, and dictionaries for file extensions and programming languages.
-- `gpt_readme/dir_summary.py`: Provides functionality for summarizing the content of a directory. It recursively traverses the directory structure, generates summaries for files and subdirectories, and utilizes the GPT-3.5 Turbo model to generate a summary of the directory's content.
-- `gpt_readme/file_summary.py`: Generates a summary of a given file using the GPT-3.5 Turbo model. It retrieves the file content, determines the language, and constructs a prompt for the model to generate the summary.
-- `gpt_readme/main.py`: Orchestrates the generation of the README file. It parses user inputs, scans code extensions, generates code summaries using the GPT-3.5 Turbo model, and saves the README file.
-- `gpt_readme/prompts.py`: Defines prompts for generating documentation summaries for code elements such as modules and files. It provides templates for generating prompts for the entire codebase, modules, and files.
-- `gpt_readme/utils.py`: Provides utility functions for the project, including handling file operations, generating prompts, and constructing summary pairs.
+- `gpt_readme/__init__.py`: Defines metadata about the `gpt_readme` library, such as version, author, and URL.
 
-Please note that if the code modules and files in the `gpt_readme` module do not have sufficient comments or documentation, the generated README content for those components may be limited.
+- `gpt_readme/__main__.py`: Serves as the entry point for the `gpt_readme` codebase.
+
+- `gpt_readme/constants.py`: Defines constants and variables used in the codebase, including environment variables, a console object, and mappings between file extensions and programming languages.
+
+- `gpt_readme/dir_summary.py`: Generates a summary of a directory and its contents. It recursively traverses the directory structure, collects file and module summaries, and generates the final summary using the GPT-3.5-turbo model.
+
+- `gpt_readme/file_summary.py`: Generates a summary of a given file. It logs the file path, retrieves the content of the file, determines the language of the file, and generates a summary using the GPT-3.5-turbo model.
+
+- `gpt_readme/main.py`: Generates a README file for a code repository or file. It parses command-line arguments, generates summaries of code modules and their content using the `dir_summary` and `file_summary` functions, calls the `prompt_summary` function to generate a summary using the GPT-3.5-turbo model, and writes the generated README to a file.
+
+- `gpt_readme/prompts.py`: Contains predefined prompts in Chinese for generating documentation for code modules or files. It provides instructions on how to structure the documentation and placeholders for relevant information.
+
+- `gpt_readme/utils.py`: Provides utility functions for working with files and generating prompts and summaries. It includes functions for file handling, language detection, and prompt/summary construction.
 
 ## Acknowledgement
 
-The `gpt_readme` module utilizes the following third-party code libraries:
+The `gpt_readme` module relies on the following third-party libraries:
 
-- OpenAI GPT-3.5 Turbo: A language model developed by OpenAI that generates human-like text based on prompts.
+- OpenAI GPT-3.5-turbo: A language model used for generating code summaries and documentation.
 
-We would like to express our gratitude to OpenAI for providing this powerful language model, which enables us to automate the process of generating informative README files for code repositories and files.
+I would like to express my gratitude to the developers of the OpenAI GPT-3.5-turbo for their contribution to this module.

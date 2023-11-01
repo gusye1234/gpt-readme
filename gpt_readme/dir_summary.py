@@ -49,8 +49,12 @@ def dir_summary(path):
             total_languages.add(result["language"])
         elif not ignore_dir(real_path):
             result = dir_summary(real_path)
+            if result["content"] == "":
+                continue
             sub_module_summaries[real_path] = result["content"]
             total_languages.add(result["language"])
+    if len(sub_file_summaries) == 0 and len(sub_module_summaries) == 0:
+        return {"content": "", "language": ""}
     file_summaries = construct_summary_pair(sub_file_summaries)
     module_summaries = construct_summary_pair(sub_module_summaries)
     language = " ".join(total_languages)
@@ -58,7 +62,7 @@ def dir_summary(path):
         language=language,
         file_summaries=file_summaries,
         module_summaries=module_summaries,
-        max_length=500,
+        max_length=300,
         path=path,
     )
     console.print(summary)
