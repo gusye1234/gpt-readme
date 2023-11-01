@@ -43,6 +43,6 @@ def construct_prompt(system, user):
 def construct_summary_pair(pairs: dict):
     res = ""
     for key, value in pairs.items():
-        summary = f"* {key}: {value}\n"
+        summary = f"# {key}\n{value}\n\n"
         res += summary
     return res

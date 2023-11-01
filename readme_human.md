@@ -47,7 +47,7 @@ You can check the detail options by
 
 ```
 >> gpt_readme -h
-usage: gpt_readme [-h] [--path PATH] [--exts EXTS] [--language LANGUAGE] [--out OUT]
+usage: gpt_readme [-h] [--path PATH] [--exts EXTS] [--language LANGUAGE] [--demand DEMAND] [--out OUT]
 
 GPT-readme: Use ChatGPT to write README, based on your code.
 
@@ -56,6 +56,7 @@ options:
   --path PATH          The local path for your code repo/file
   --exts EXTS          Select your code extension name, split by comma, e.g. py,cpp
   --language LANGUAGE  Select your readme language
+  --demand DEMAND      Additional requires for the gpt-readme
   --out OUT            Select where your readme file should be saved
 ```
 
