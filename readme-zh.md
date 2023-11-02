@@ -16,57 +16,53 @@
 # gpt-readme
 
 ## Introduction
-gpt-readme是一个用于生成README文档的命令行工具。它使用OpenAI GPT-3.5 Turbo模型根据代码生成README内容。通过指定代码库或文件、代码扩展名、README语言和其他要求，可以生成相应的README文件。
+`gpt-readme` 是一个用于生成 README 文件的 Python 代码库。它使用 OpenAI GPT-3.5 Turbo 模型来根据代码生成 README 文件。该代码库提供了多个功能，包括目录和文件摘要、代码文件摘要以及生成 README 文件等。
 
 ## Get Started
-### Installation
-可以通过以下方式安装gpt-readme：
-- 通过pip安装：`pip install gpt-readme`
+你可以通过以下方式安装 `gpt-readme`：
+- 通过 pip 安装：`pip install gpt-readme`
 - 从源代码仓库安装：`pip install git+https://github.com/gusye1234/gpt-readme.git`
 
-### Command-line Usage
-可以使用以下命令来使用gpt-readme：
+安装完成后，你可以在命令行中使用 `gpt-readme` 命令来生成 README 文件。
+
+使用示例：
 ```
-gpt-readme [--path PATH] [--exts EXTS] [--language LANGUAGE] [--demand DEMAND] [--out OUT] [--cache CACHE]
+gpt-readme --path <path> --exts <extensions> --language <language> --demand <demand> --out <output_file> --cache <cache> --agree
 ```
-可用的命令行选项包括：
-- `--path`：代码库或文件的本地路径（默认为"./"）。
-- `--exts`：选择代码扩展名，用逗号分隔（默认为"py,cpp"）。
-- `--language`：选择README语言（默认为"english"）。
-- `--demand`：gpt-readme的附加要求（默认为"No false summary is allowed"）。
-- `--out`：选择README文件的保存位置（默认为"./readme.md"）。
-- `--cache`：缓存代码摘要以加快未来的生成速度（默认为True）。
+
+命令行选项说明：
+- `--path`：代码库或文件的本地路径。
+- `--exts`：选择代码扩展名，用逗号分隔。
+- `--language`：选择 README 的目标语言。
+- `--demand`：README 的附加要求。
+- `--out`：指定生成的 README 文件保存的位置。
+- `--cache`：启用或禁用代码摘要的缓存。
+- `--agree`：同意将代码发送给 OpenAI。
+
+注意：实际使用和可用选项可能因具体实现和要求而有所不同。
 
 ## Feature
-gpt-readme支持以下主要功能：
-- 根据代码生成README文档
-- 支持多种代码扩展名和README语言
-- 可以指定附加要求来生成README内容
-- 可以缓存代码摘要以提高生成速度
-
-使用场景：
-- 生成代码库的README文档
-- 自动生成代码文件的摘要
+- 目录和文件摘要：`gpt-readme` 可以根据代码生成目录和文件的摘要，帮助用户快速了解代码库的结构和内容。
+- 代码文件摘要：`gpt-readme` 可以根据给定的提示生成代码文件的摘要，帮助用户了解代码文件的功能和用途。
+- 生成 README 文件：`gpt-readme` 可以使用 OpenAI GPT-3.5 Turbo 模型生成 README 文件，帮助用户快速创建项目的说明文档。
 
 ## Implementation
-gpt-readme包含以下代码文件和子模块：
-
-### 代码文件
-- gpt_readme/__init__.py：初始化文件，导入main模块的main函数，并定义版本号、作者和项目链接。
-- gpt_readme/__main__.py：作为代码的入口点，导入main模块的main函数并执行。
-- gpt_readme/constants.py：定义与GPT-Readme项目相关的变量和函数，包括文件扩展名与编程语言的映射以及生成README标题的函数。
-- gpt_readme/dir_summary.py：用于总结目录及其内容的文件，使用OpenAI GPT-3.5 Turbo模型根据文件和模块的摘要生成总结。
-- gpt_readme/file_summary.py：提供对代码文件进行总结的功能，使用OpenAI GPT-3.5 Turbo模型根据给定的提示生成代码文件的摘要。
-- gpt_readme/main.py：用于使用ChatGPT基于代码生成README文件的文件，提供命令行接口以指定代码库或文件、代码扩展名、README语言和其他要求。
-- gpt_readme/prompts.py：定义用于生成README文档的模板字符串。
-- gpt_readme/utils.py：提供gpt_readme代码库的实用函数，包括环境设置、缓存管理、内容和目录哈希、构建提示和总结等功能。
-
-### 子模块
-无
+- `gpt_readme/__init__.py`：`gpt-readme` 模块的初始化文件，导入了 `main` 模块的 `main` 函数，并定义了版本号、作者和项目链接。
+- `gpt_readme/__main__.py`：代码库的入口文件，导入了 `main` 模块的 `main` 函数，并在脚本运行时调用它。
+- `gpt_readme/constants.py`：定义了与 GPT-Readme 项目相关的变量和函数，包括文件扩展名与编程语言的映射以及生成 README 头部的函数。
+- `gpt_readme/dir_summary.py`：用于摘要目录和其内容，使用 OpenAI GPT-3.5 Turbo 模型根据文件和模块摘要生成摘要。提供了对代码库及其组件的概述。
+- `gpt_readme/file_summary.py`：提供了摘要代码文件的功能，使用 OpenAI GPT-3.5 Turbo 模型根据给定的提示生成代码文件的摘要。
+- `gpt_readme/main.py`：一个 Python 脚本，使用 ChatGPT 根据代码生成 README 文件。它接受命令行参数，如代码库或文件的路径、代码扩展名、README 的目标语言和其他要求，并使用 GPT-3.5 Turbo 模型生成 README，并保存到指定位置。
+- `gpt_readme/prompts.py`：定义了用于生成 README 文档的模板字符串，包括系统级提示和模块级提示。
+- `gpt_readme/utils.py`：提供了一些实用函数，用于设置环境、管理缓存配置、哈希内容和目录、构建提示和摘要等。
 
 ## Acknowledgement
-gpt-readme使用了以下第三方代码库：
-- OpenAI GPT-3.5 Turbo模型：用于生成README文档的内容。
-- rich.console模块：用于在命令行中显示丰富的文本样式。
+`gpt-readme` 使用了以下第三方代码库：
+- `rich.console`：提供了丰富的控制台输出功能，用于美化 README 文件的显示效果。
+- `os`、`openai`、`sys`：Python 标准库，提供了操作系统、OpenAI GPT-3.5 Turbo 模型和系统相关的功能。
+- `argparse`：Python 标准库，用于解析命令行参数。
+- `rich.markdown`：提供了将 Markdown 文本转换为富文本的功能，用于生成 README 文件。
+- `json`、`hashlib`、`getpass`：Python 标准库，提供了 JSON 解析、哈希计算和密码输入等功能。
+- `rich.prompt.Confirm`：提供了交互式确认功能，用于用户确认是否发送代码给 OpenAI。
 
-感谢这些优秀的开源项目和开发者们的贡献！
+感谢以上代码库的作者和贡献者。

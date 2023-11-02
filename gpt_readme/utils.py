@@ -3,11 +3,19 @@ import json
 import hashlib
 import openai
 from getpass import getpass
+from rich.prompt import Confirm
 from . import constants
 from .constants import scan_exts, ext2language, console
 
 
 def setup_env(args):
+    if not args.agree:
+        is_openai_ok = Confirm.ask(
+            "gpt-readme use OpenAI API. By continuing, you agree to send your code to OpenAI:",
+            default=True,
+        )
+        if not is_openai_ok:
+            exit(0)
     if os.environ.get('OPENAI_API_KEY', None) is None:
         openai.api_key = getpass("Your OpenAI API key: ")
     local_path = os.path.relpath(args.path)

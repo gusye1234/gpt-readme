@@ -46,9 +46,13 @@ def parse_args():
     )
     parser.add_argument(
         "--cache",
-        type=bool,
-        default=True,
-        help='Cache the summary of the code, to speed up the generation of next time. It will leave a .gpt-readme.json file under the path',
+        type=int,
+        default=1,
+        help='Cache the summary of the code, to speed up the generation of next time. It will leave a .gpt-readme.json file under the path. Set 0 to disable it',
+    )
+    parser.add_argument(
+        "--agree",
+        help='If you are OK to send your code to OpenAI',
     )
     return parser.parse_args()
 

@@ -2,7 +2,7 @@
      <a href="https://github.com/gusye1234/gpt-readme/blob/main/readme-zh.md">
        GPT-written readme in chinese
     </a>
-  <br/>
+	  <br/>
     <br/>
     <a href="https://github.com/gusye1234/gpt-readme">
       <img src="https://img.shields.io/badge/written_by-GPT-green">
@@ -20,74 +20,69 @@
 # gpt-readme
 
 ## Introduction
-
-The `gpt-readme` module is a Python package that automates the process of generating informative and well-structured README files for code repositories. It uses the OpenAI GPT-3.5 Turbo model to generate summaries based on code and module descriptions. With `gpt-readme`, developers can easily create README documentation that provides a clear overview of their codebase.
+`gpt-readme` is a Python code library for generating README files. It utilizes the OpenAI GPT-3.5 Turbo model to generate README files based on code. The library provides various functionalities including directory and file summaries, code file summaries, and README generation.
 
 ## Get Started
-
 To install `gpt-readme`, you can use either of the following methods:
 
-- Install from pip:
+1. Install from PyPI:
+   ```
+   pip install gpt-readme
+   ```
 
-  ```
-  pip install gpt-readme
-  ```
+2. Install from source:
+   ```
+   git clone https://github.com/gusye1234/gpt-readme.git
+   cd gpt-readme
+   pip install .
+   ```
 
-- Install from source (GitHub repository: [gusye1234/gpt-readme](https://github.com/gusye1234/gpt-readme)):
-
-  ```
-  git clone https://github.com/gusye1234/gpt-readme.git
-  cd gpt-readme
-  python setup.py install
-  ```
-
-Once installed, you can use the `gpt-readme` command in the command line to generate README files. The available command-line options are:
+Once installed, you can use the `gpt-readme` command in the command line. Here is an example of the command line usage:
 
 ```
-gpt-readme [--path PATH] [--exts EXTS] [--language LANGUAGE] [--demand DEMAND] [--out OUT] [--cache CACHE]
+gpt-readme --path <path> --exts <extensions> --language <language> --demand <demand> --out <output_file> --cache <cache> --agree
 ```
 
-- `--path`: The local path for the code repository or file (default: "./")
-- `--exts`: Select the code extension names, separated by commas (default: "py,cpp")
-- `--language`: Select the readme language (default: "english")
-- `--demand`: Additional requirements for the gpt-readme (default: "No false summary is allowed")
-- `--out`: Select where the readme file should be saved (default: "./readme.md")
-- `--cache`: Cache the code summary to speed up future generation (default: True)
+- `--path`: The local path of the code repository or file.
+- `--exts`: Comma-separated code extensions to consider.
+- `--language`: The target language for the README.
+- `--demand`: Additional requirements for the README.
+- `--out`: The location to save the generated README file.
+- `--cache`: Enable or disable caching of code summaries.
+- `--agree`: Agree to send code to OpenAI.
+
+Note: The actual usage and available options may vary depending on the specific implementation and requirements.
 
 ## Features
-
-- Automatic generation of README documentation for code repositories
-- Summarization of code files and directories using the OpenAI GPT-3.5 Turbo model
-- Customizable code extension selection
-- Support for multiple readme languages
-- Ability to specify additional requirements for the generated summaries
-- Caching of code summaries for faster generation
+- Generate README files based on code using the OpenAI GPT-3.5 Turbo model.
+- Summarize directories and their contents.
+- Summarize code files.
+- Support for multiple code extensions.
+- Customizable README language and additional requirements.
 
 ## Implementation
+The `gpt-readme` code library consists of the following modules and files:
 
-The `gpt-readme` module consists of the following files and submodules:
+- `gpt_readme/__init__.py`: The initialization file of the `gpt-readme` module. It imports the `main` function from the `main` module and defines the version number, author, and project link.
 
-- `__init__.py`: Provides information about the version, author, and URL of the `gpt-readme` package.
-- `__main__.py`: Serves as the entry point for the code and executes the `main` function.
-- `constants.py`: Defines variables and a function related to the GPT-Readme project, such as mappings between file extensions and programming languages.
-- `dir_summary.py`: Responsible for summarizing directories and their contents using the OpenAI GPT-3.5 Turbo model.
-- `file_summary.py`: Provides functionality for summarizing code files using the OpenAI GPT-3.5 Turbo model.
-- `main.py`: Generates README files using ChatGPT based on code and provides a command-line interface for specifying code repositories, file extensions, readme language, and additional requirements.
-- `prompts.py`: Stores predefined prompts for generating README documentation for code modules and files.
-- `utils.py`: Provides utility functions for the `gpt-readme` codebase, such as environment setup, cache management, content hashing, language detection, and prompt/summary construction.
+- `gpt_readme/__main__.py`: The entry file of the code library. It imports the `main` function from the `main` module and calls it when the script is run.
+
+- `gpt_readme/constants.py`: This file defines variables and functions related to the GPT-Readme project, including mappings of file extensions to programming languages and a function to generate the README header.
+
+- `gpt_readme/dir_summary.py`: This file is used to summarize directories and their contents. It utilizes the OpenAI GPT-3.5 Turbo model to generate summaries based on file and module summaries. It provides an overview of the code library and its components.
+
+- `gpt_readme/file_summary.py`: This file provides the functionality to summarize code files. It uses the OpenAI GPT-3.5 Turbo model to generate summaries based on given prompts.
+
+- `gpt_readme/main.py`: This file is a Python script that generates README files based on code using ChatGPT. It accepts command line arguments such as the path to the code repository or file, code extensions, target language for the README, additional requirements, output file location, caching option, and agreement to send code to OpenAI. It utilizes various external modules and internal modules and functions for its implementation.
+
+- `gpt_readme/prompts.py`: This file defines template strings for generating README documents, including system-level prompts and module-level prompts.
+
+- `gpt_readme/utils.py`: This file provides utility functions for setting up the environment, managing cache configuration, hashing content and directories, building prompts and summaries, and more. It utilizes various external modules and internal modules and functions for its implementation.
 
 ## Acknowledgement
+The `gpt-readme` code library relies on the following third-party libraries:
 
-The `gpt-readme` module relies on the following third-party libraries:
+- `rich.console`: Provides the `Console` class for rich text output.
 
-- `os`: Provides functions for file and path operations.
-- `openai`: Enables interaction with the OpenAI GPT-3.5 Turbo model.
-- `sys`: Provides access to some variables used or maintained by the interpreter.
-- `rich.console`: Offers rich text rendering capabilities in the console.
-- `argparse`: Facilitates command-line argument parsing.
-- `rich.markdown`: Renders Markdown content.
-- `json`: Handles JSON data.
-- `hashlib`: Provides hashing algorithms.
-- `getpass`: Allows secure password input.
+Special thanks to the authors and contributors of these libraries for their valuable contributions.
 
-Special thanks to the developers of these libraries for their contributions to the `gpt-readme` module.
