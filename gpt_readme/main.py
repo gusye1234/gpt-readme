@@ -48,7 +48,7 @@ def parse_args():
         "--cache",
         type=bool,
         default=True,
-        help='Cache the summary of the code, to speed up the generation of next time. It will leave a .gpt_readme.json file under the path',
+        help='Cache the summary of the code, to speed up the generation of next time. It will leave a .gpt-readme.json file under the path',
     )
     return parser.parse_args()
 

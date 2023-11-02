@@ -38,9 +38,9 @@ def generate_end(chunk):
 
 def get_cache_config(path):
     if os.path.isfile(path):
-        cache_path = os.path.join(os.path.pardir(path), ".gpt_readme.json")
+        cache_path = os.path.join(os.path.pardir(path), ".gpt-readme.json")
     else:
-        cache_path = os.path.join(path, ".gpt_readme.json")
+        cache_path = os.path.join(path, ".gpt-readme.json")
     if os.path.exists(cache_path):
         try:
             with open(cache_path) as f:
@@ -54,9 +54,9 @@ def get_cache_config(path):
 
 def set_cache_config(path, cache):
     if os.path.isfile(path):
-        cache_path = os.path.join(os.path.pardir(path), ".gpt_readme.json")
+        cache_path = os.path.join(os.path.pardir(path), ".gpt-readme.json")
     else:
-        cache_path = os.path.join(path, ".gpt_readme.json")
+        cache_path = os.path.join(path, ".gpt-readme.json")
     with open(cache_path, 'w') as f:
         json.dump(cache, f)
 
