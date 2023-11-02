@@ -14,7 +14,7 @@ with open("./gpt_readme/__init__.py") as f:
                 vars2readme[v] = line.split('=')[1]
 
 setuptools.setup(
-    name='gpt_readme',
+    name='gpt-readme',
     url=vars2readme['__url__'],
     version=vars2readme['__version__'],
     author=vars2readme['__author__'],
@@ -27,11 +27,11 @@ setuptools.setup(
         'License :: OSI Approved :: MIT License',
         'Operating System :: OS Independent',
     ],
-    python_requires='>=3.7',
+    python_requires='>=3.8',
     install_requires=['openai', 'rich'],
     entry_points={
         'console_scripts': [
-            'gpt_readme = gpt_readme:main',
+            'gpt-readme = gpt_readme:main',
         ]
     },
 )

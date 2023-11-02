@@ -2,7 +2,7 @@
 # Edit at https://www.toptal.com/developers/gitignore?templates=python
 
 .vscode
-.gpt_readme.json
+.gpt-readme.json
 .DS_Store
 ### Python ###
 # Byte-compiled / optimized / DLL files
