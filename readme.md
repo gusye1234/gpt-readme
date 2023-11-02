@@ -54,7 +54,7 @@ gpt_readme --path="<code_path>" --exts="<code_extensions>" --language="<readme_l
 - `--language`: Selects the language for the README file.
 - `--demand`: Specifies additional requirements for the README generation.
 - `--out`: Specifies the path where the README file should be saved.
-- `--cache`: Enables or disables caching of generated summaries. Set to "on" or "off".
+- `--cache`: Enables or disables caching of generated summaries. Set to "True" or "False".
 
 Note: Before using `gpt_readme`, make sure you have configured your OpenAI API key. You can set the API key using the `OPENAI_API_KEY` environment variable.
 
