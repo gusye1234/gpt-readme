@@ -53,7 +53,7 @@ def relative_module(path):
 
 def get_cache_config(path):
     if os.path.isfile(path):
-        cache_path = os.path.join(os.path.pardir(path), ".gpt-readme.json")
+        cache_path = os.path.join(os.path.dirname(path), ".gpt-readme.json")
     else:
         cache_path = os.path.join(path, ".gpt-readme.json")
     if os.path.exists(cache_path):
@@ -69,7 +69,7 @@ def get_cache_config(path):
 
 def set_cache_config(path, cache):
     if os.path.isfile(path):
-        cache_path = os.path.join(os.path.pardir(path), ".gpt-readme.json")
+        cache_path = os.path.join(os.path.dirname(path), ".gpt-readme.json")
     else:
         cache_path = os.path.join(path, ".gpt-readme.json")
     with open(cache_path, 'w') as f:

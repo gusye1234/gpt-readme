@@ -4,15 +4,16 @@ import argparse
 from rich.markdown import Markdown
 from .constants import readme_header, console, envs
 from . import constants
-from .utils import construct_prompt, end_env, setup_env
+from .utils import construct_prompt, end_env, setup_env, relative_module
 from .dir_summary import dir_summary
 from .file_summary import file_summary
 from .prompts import FINAL_PROMPT, SYSTEM_PROMPT
 
 
 def parse_args():
+    # use gpt-readme in command line
     parser = argparse.ArgumentParser(
-        description='GPT-readme: Use ChatGPT to write README, based on your code.'
+        description='gpt-readme: Use ChatGPT to write README, based on your code.'
     )
     parser.add_argument(
         "--path",
@@ -72,7 +73,6 @@ def prompt_summary(**kwargs):
 
 def main():
     args = parse_args()
-    local_path = os.path.relpath(args.path)
 
     setup_env(args)
     local_path = envs['root_path']
@@ -86,7 +86,7 @@ def main():
     readme = prompt_summary(
         language=summaries['language'],
         module_summaries=summaries['summary'],
-        path=local_path,
+        path=relative_module(local_path),
         user_demand=args.demand,
     )
     console.print(Markdown(readme))

@@ -98,7 +98,7 @@ def dir_summary(path):
 
     dir_result = run_recursive_summarize(path)
 
-    if envs["cache"] is not None:
+    if envs["cache"] is not None and dir_result['summary'] != "":
         envs["cache"][module] = {}
         envs["cache"][module]["summary"] = dir_result['summary']
         envs["cache"][module]["language"] = dir_result['language']
