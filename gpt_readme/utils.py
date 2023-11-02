@@ -1,7 +1,34 @@
 import os
 import json
 import hashlib
-from .constants import scan_exts, ext2language
+from getpass import getpass
+from . import constants
+from .constants import scan_exts, ext2language, console
+
+
+def setup_env(args):
+    if os.environ.get('OPENAI_API_KEY', None) is None:
+        os.environ['OPENAI_API_KEY'] = getpass("Your OpenAI API key: ")
+    local_path = os.path.relpath(args.path)
+    constants.envs['human_language'] = args.language
+    if args.cache:
+        constants.envs['cache'] = get_cache_config(local_path)
+    for ext in args.exts.split(","):
+        ext = ext.strip()
+        if not ext:
+            continue
+        if ext in ext2language:
+            scan_exts.append(ext)
+        else:
+            console.log(
+                f"Extension [{ext}] is not supported yet, please use one of [{','.join(ext2language.keys())}]"
+            )
+
+
+def end_env(args):
+    local_path = os.path.relpath(args.path)
+    if args.cache:
+        set_cache_config(local_path, constants.envs["cache"])
 
 
 def generate_end(chunk):
