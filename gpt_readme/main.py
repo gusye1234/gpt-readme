@@ -77,13 +77,13 @@ def main():
         summaries = dir_summary(local_path)
     end_env(args)
 
+    console.rule("Generating README")
     readme = prompt_summary(
         language=summaries['language'],
-        module_summaries=summaries['content'],
+        module_summaries=summaries['summary'],
         path=local_path,
         user_demand=args.demand,
     )
-    console.rule("ReadMe")
     console.print(Markdown(readme))
     with open(args.out, 'w') as f:
         f.write(readme_header(args))

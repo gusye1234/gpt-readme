@@ -7,6 +7,7 @@ from .utils import (
     construct_summary_pair,
     construct_prompt,
     generate_end,
+    hash_dir,
 )
 from .constants import console, envs
 from .file_summary import file_summary
@@ -34,8 +35,7 @@ def prompt_summary(**kwargs):
     return output
 
 
-def dir_summary(path):
-    console.print(f"[bold green]DIR[/bold green] {path}")
+def run_recursive_summarize(path):
     paths = sorted(list(os.listdir(path)))
     sub_file_summaries = {}
     sub_module_summaries = {}
@@ -46,27 +46,27 @@ def dir_summary(path):
             if ignore_file(real_path):
                 continue
             result = file_summary(real_path)
-            sub_file_summaries[real_path] = result["content"]
+            sub_file_summaries[real_path] = result["summary"]
             total_languages.add(result["language"])
         elif not ignore_dir(real_path):
             result = dir_summary(real_path)
-            if result["content"] == "":
+            if result["summary"] == "":
                 continue
-            sub_module_summaries[real_path] = result["content"]
+            sub_module_summaries[real_path] = result["summary"]
             total_languages.add(result["language"])
     if len(sub_file_summaries) == 0 and len(sub_module_summaries) == 0:
-        return {"content": "", "language": ""}
+        return {"summary": "", "language": ""}
     language = " ".join(total_languages)
 
     # fast forward for single file or module
     if len(sub_file_summaries) == 1 and len(sub_module_summaries) == 0:
         dir_result = {
-            "content": list(sub_file_summaries.values())[0],
+            "summary": list(sub_file_summaries.values())[0],
             "language": language,
         }
     elif len(sub_file_summaries) == 0 and len(sub_module_summaries) == 1:
         dir_result = {
-            "content": list(sub_file_summaries.values())[0],
+            "summary": list(sub_file_summaries.values())[0],
             "language": language,
         }
     else:
@@ -80,6 +80,26 @@ def dir_summary(path):
             max_length=300,
             path=path,
         )
-        dir_result = {"content": summary, "language": language}
-    console.rule(f"👌 {path}")
+        dir_result = {"summary": summary, "language": language}
+    return dir_result
+
+
+def dir_summary(path):
+    console.print(f"[bold green]DIR[/bold green] {path}")
+
+    if envs["cache"] is not None:
+        dir_cache = envs["cache"].get(path, None)
+        if dir_cache is not None and dir_cache["hash"] == hash_dir(path):
+            console.print("[green]✓ Already summarized[/green]")
+            return dict(language=dir_cache["language"], summary=dir_cache["summary"])
+
+    dir_result = run_recursive_summarize(path)
+
+    if envs["cache"] is not None:
+        envs["cache"][path] = {}
+        envs["cache"][path]["summary"] = dir_result['summary']
+        envs["cache"][path]["language"] = dir_result['language']
+        envs["cache"][path]["hash"] = hash_dir(path)
+
+    console.rule(f"✓ {path}")
     return dir_result

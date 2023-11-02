@@ -1,6 +1,7 @@
 import os
 import json
 import hashlib
+import openai
 from getpass import getpass
 from . import constants
 from .constants import scan_exts, ext2language, console
@@ -8,7 +9,7 @@ from .constants import scan_exts, ext2language, console
 
 def setup_env(args):
     if os.environ.get('OPENAI_API_KEY', None) is None:
-        os.environ['OPENAI_API_KEY'] = getpass("Your OpenAI API key: ")
+        openai.api_key = getpass("Your OpenAI API key: ")
     local_path = os.path.relpath(args.path)
     constants.envs['human_language'] = args.language
     if args.cache:
@@ -64,6 +65,22 @@ def set_cache_config(path, cache):
 def hash_content(content: str):
     content = content.strip()
     return hashlib.md5(content.encode()).hexdigest()
+
+
+def hash_dir(path):
+    paths = sorted(list(os.listdir(path)))
+    name_hash_in_order = []
+    for entity in paths:
+        real_path = os.path.join(path, entity)
+        if os.path.isfile(real_path):
+            if ignore_file(real_path):
+                continue
+            content = get_file_content(real_path)
+            content = "".join(content)
+            name_hash_in_order.append((real_path, hash_content(content)))
+        elif not ignore_dir(real_path):
+            name_hash_in_order.append((real_path, hash_dir(real_path)))
+    return hashlib.md5(str(name_hash_in_order).encode()).hexdigest()
 
 
 def get_language(path):

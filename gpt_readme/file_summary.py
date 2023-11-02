@@ -16,7 +16,7 @@ def prompt_summary(**kwargs):
     if envs["cache"] is not None:
         file_cache = envs["cache"].get(kwargs['path'], None)
         if file_cache is not None and file_cache["hash"] == hash_content(content):
-            console.print("[green]Already summarized[/green]")
+            console.print("[green]✓ Already summarized[/green]")
             return file_cache["summary"]
     final_prompt = FILE_PROMPT.format(**kwargs)
     final_system = SYSTEM_PROMPT.format(**kwargs, human_language=envs['human_language'])
@@ -49,4 +49,4 @@ def file_summary(file_path):
     summary = prompt_summary(
         language=language, code=content, max_length=200, path=file_path
     )
-    return {"content": summary, "language": language}
+    return {"summary": summary, "language": language}
