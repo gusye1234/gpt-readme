@@ -17,7 +17,7 @@ def prompt_summary(**kwargs):
     final_prompt = MODULE_PROMPT.format(**kwargs)
     final_system = SYSTEM_PROMPT.format(**kwargs, human_language=envs['human_language'])
     response = openai.ChatCompletion.create(
-        model="gpt-3.5-turbo",
+        model=kwargs['model'],
         messages=construct_prompt(final_system, final_prompt),
         temperature=0,
         stream=True,
@@ -34,7 +34,7 @@ def prompt_summary(**kwargs):
     return output
 
 
-def dir_summary(path):
+def dir_summary(path, model):
     console.print(f"[bold green]DIR[/bold green] {path}")
     paths = sorted(list(os.listdir(path)))
     sub_file_summaries = {}
@@ -45,11 +45,11 @@ def dir_summary(path):
         if os.path.isfile(real_path):
             if ignore_file(real_path):
                 continue
-            result = file_summary(real_path)
+            result = file_summary(real_path, model)
             sub_file_summaries[real_path] = result["content"]
             total_languages.add(result["language"])
         elif not ignore_dir(real_path):
-            result = dir_summary(real_path)
+            result = dir_summary(real_path, model)
             if result["content"] == "":
                 continue
             sub_module_summaries[real_path] = result["content"]
@@ -79,6 +79,7 @@ def dir_summary(path):
             module_summaries=module_summaries,
             max_length=300,
             path=path,
+            model=model,
         )
         dir_result = {"content": summary, "language": language}
     console.rule(f"👌 {path}")

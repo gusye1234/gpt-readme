@@ -46,7 +46,7 @@ git clone https://github.com/gusye1234/gpt-readme.git
 To generate a README file using `gpt_readme`, use the following command:
 
 ```
-gpt_readme --path="<code_path>" --exts="<code_extensions>" --language="<readme_language>" --demand="<additional_requirements>" --out="<output_file>" --cache="<cache_config>"
+gpt_readme --path="<code_path>" --exts="<code_extensions>" --language="<readme_language>" --demand="<additional_requirements>" --out="<output_file>" --cache="<cache_config> --model="<model_name>"
 ```
 
 - `--path`: Specifies the local path for the code repository or file.
@@ -55,6 +55,7 @@ gpt_readme --path="<code_path>" --exts="<code_extensions>" --language="<readme_l
 - `--demand`: Specifies additional requirements for the README generation.
 - `--out`: Specifies the path where the README file should be saved.
 - `--cache`: Enables or disables caching of generated summaries. Set to "True" or "False".
+- `--model`: Specifies the model to use for generating README files. The default model is `gpt-3.5-turbo`. See the [OpenAI API Model documentation](https://platform.openai.com/docs/models/overview) for more information about the available models.
 
 Note: Before using `gpt_readme`, make sure you have configured your OpenAI API key. You can set the API key using the `OPENAI_API_KEY` environment variable.
 

@@ -47,7 +47,7 @@ You can check the detail options by
 
 ```
 >> gpt_readme -h
-usage: gpt_readme [-h] [--path PATH] [--exts EXTS] [--language LANGUAGE] [--demand DEMAND] [--out OUT]
+usage: gpt_readme [-h] [--path PATH] [--exts EXTS] [--language LANGUAGE] [--demand DEMAND] [--out OUT] [--model MODEL]
 
 GPT-readme: Use ChatGPT to write README, based on your code.
 
@@ -58,6 +58,7 @@ options:
   --language LANGUAGE  Select your readme language
   --demand DEMAND      Additional requires for the gpt-readme
   --out OUT            Select where your readme file should be saved
+  --model MODEL        Select which model to use, default is gpt-3.5-turbo
 ```
 
 Make sure to configure the necessary environment variables (`OPENAI_API_KEY`)before running the module.
