@@ -8,6 +8,7 @@ from .utils import (
     construct_prompt,
     generate_end,
     hash_dir,
+    relative_module,
 )
 from .constants import console, envs
 from .file_summary import file_summary
@@ -46,13 +47,13 @@ def run_recursive_summarize(path):
             if ignore_file(real_path):
                 continue
             result = file_summary(real_path)
-            sub_file_summaries[real_path] = result["summary"]
+            sub_file_summaries[relative_module(real_path)] = result["summary"]
             total_languages.add(result["language"])
         elif not ignore_dir(real_path):
             result = dir_summary(real_path)
             if result["summary"] == "":
                 continue
-            sub_module_summaries[real_path] = result["summary"]
+            sub_module_summaries[relative_module(real_path)] = result["summary"]
             total_languages.add(result["language"])
     if len(sub_file_summaries) == 0 and len(sub_module_summaries) == 0:
         return {"summary": "", "language": ""}
@@ -70,7 +71,8 @@ def run_recursive_summarize(path):
             "language": language,
         }
     else:
-        console.print(f"[bold green]DIR[/bold green] {path}")
+        module = relative_module(path)
+        console.print(f"[bold green]DIR[/bold green] {module}")
         file_summaries = construct_summary_pair(sub_file_summaries)
         module_summaries = construct_summary_pair(sub_module_summaries)
         summary = prompt_summary(
@@ -78,17 +80,18 @@ def run_recursive_summarize(path):
             file_summaries=file_summaries,
             module_summaries=module_summaries,
             max_length=300,
-            path=path,
+            path=module,
         )
         dir_result = {"summary": summary, "language": language}
     return dir_result
 
 
 def dir_summary(path):
-    console.print(f"[bold green]DIR[/bold green] {path}")
+    module = relative_module(path)
+    console.print(f"[bold green]DIR[/bold green] {module}")
 
     if envs["cache"] is not None:
-        dir_cache = envs["cache"].get(path, None)
+        dir_cache = envs["cache"].get(module, None)
         if dir_cache is not None and dir_cache["hash"] == hash_dir(path):
             console.print("[green]✓ Already summarized[/green]")
             return dict(language=dir_cache["language"], summary=dir_cache["summary"])
@@ -96,10 +99,10 @@ def dir_summary(path):
     dir_result = run_recursive_summarize(path)
 
     if envs["cache"] is not None:
-        envs["cache"][path] = {}
-        envs["cache"][path]["summary"] = dir_result['summary']
-        envs["cache"][path]["language"] = dir_result['language']
-        envs["cache"][path]["hash"] = hash_dir(path)
+        envs["cache"][module] = {}
+        envs["cache"][module]["summary"] = dir_result['summary']
+        envs["cache"][module]["language"] = dir_result['language']
+        envs["cache"][module]["hash"] = hash_dir(path)
 
-    console.rule(f"✓ {path}")
+    console.rule(f"✓ {module}")
     return dir_result

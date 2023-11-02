@@ -2,7 +2,7 @@ import os
 import openai
 import argparse
 from rich.markdown import Markdown
-from .constants import readme_header, console
+from .constants import readme_header, console, envs
 from . import constants
 from .utils import construct_prompt, end_env, setup_env
 from .dir_summary import dir_summary
@@ -75,6 +75,7 @@ def main():
     local_path = os.path.relpath(args.path)
 
     setup_env(args)
+    local_path = envs['root_path']
     if os.path.isfile(local_path):
         summaries = file_summary(local_path)
     else:

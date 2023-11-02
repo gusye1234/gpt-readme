@@ -7,6 +7,7 @@ from .utils import (
     get_language,
     generate_end,
     hash_content,
+    relative_module,
 )
 from .prompts import FILE_PROMPT, SYSTEM_PROMPT
 
@@ -43,10 +44,11 @@ def prompt_summary(**kwargs):
 
 
 def file_summary(file_path):
-    console.print(f"[bold blue]FILE[/bold blue] {file_path}")
+    module = relative_module(file_path)
+    console.print(f"[bold blue]FILE[/bold blue] {module}")
     content = "".join(get_file_content(file_path)).strip()
     language = get_language(file_path)
     summary = prompt_summary(
-        language=language, code=content, max_length=200, path=file_path
+        language=language, code=content, max_length=200, path=module
     )
     return {"summary": summary, "language": language}

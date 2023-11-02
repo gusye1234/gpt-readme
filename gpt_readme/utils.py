@@ -20,6 +20,7 @@ def setup_env(args):
         openai.api_key = getpass("Your OpenAI API key: ")
     local_path = os.path.relpath(args.path)
     constants.envs['human_language'] = args.language
+    constants.envs['root_path'] = local_path
     if args.cache:
         constants.envs['cache'] = get_cache_config(local_path)
     for ext in args.exts.split(","):
@@ -43,6 +44,11 @@ def end_env(args):
 def generate_end(chunk):
     if chunk['choices'][0]['finish_reason'] != None:
         return True
+
+
+def relative_module(path):
+    basedir = os.path.basename(constants.envs["root_path"])
+    return path.replace(constants.envs["root_path"], basedir)
 
 
 def get_cache_config(path):
