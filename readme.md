@@ -1,5 +1,9 @@
-
 <div align="center">
+     <a href="https://github.com/gusye1234/gpt-readme/blob/main/readme-zh.md">
+       GPT-written readme in chinese
+    </a>
+  <br/>
+    <br/>
     <a href="https://github.com/gusye1234/gpt-readme">
       <img src="https://img.shields.io/badge/written_by-GPT-green">
     </a>
@@ -16,17 +20,21 @@
 # gpt-readme
 
 ## Introduction
+
 The `gpt-readme` module is a Python package that automates the process of generating informative and well-structured README files for code repositories. It uses the OpenAI GPT-3.5 Turbo model to generate summaries based on code and module descriptions. With `gpt-readme`, developers can easily create README documentation that provides a clear overview of their codebase.
 
 ## Get Started
+
 To install `gpt-readme`, you can use either of the following methods:
 
 - Install from pip:
+
   ```
   pip install gpt-readme
   ```
 
 - Install from source (GitHub repository: [gusye1234/gpt-readme](https://github.com/gusye1234/gpt-readme)):
+
   ```
   git clone https://github.com/gusye1234/gpt-readme.git
   cd gpt-readme
@@ -47,6 +55,7 @@ gpt-readme [--path PATH] [--exts EXTS] [--language LANGUAGE] [--demand DEMAND] [
 - `--cache`: Cache the code summary to speed up future generation (default: True)
 
 ## Features
+
 - Automatic generation of README documentation for code repositories
 - Summarization of code files and directories using the OpenAI GPT-3.5 Turbo model
 - Customizable code extension selection
@@ -55,6 +64,7 @@ gpt-readme [--path PATH] [--exts EXTS] [--language LANGUAGE] [--demand DEMAND] [
 - Caching of code summaries for faster generation
 
 ## Implementation
+
 The `gpt-readme` module consists of the following files and submodules:
 
 - `__init__.py`: Provides information about the version, author, and URL of the `gpt-readme` package.
@@ -67,6 +77,7 @@ The `gpt-readme` module consists of the following files and submodules:
 - `utils.py`: Provides utility functions for the `gpt-readme` codebase, such as environment setup, cache management, content hashing, language detection, and prompt/summary construction.
 
 ## Acknowledgement
+
 The `gpt-readme` module relies on the following third-party libraries:
 
 - `os`: Provides functions for file and path operations.
