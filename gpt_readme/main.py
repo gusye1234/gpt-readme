@@ -55,6 +55,12 @@ def parse_args():
         "--agree",
         help='If you are OK to send your code to OpenAI',
     )
+    parser.add_argument(
+        "--model",
+        type=str,
+        default="gpt-3.5-turbo",
+        help='Select the GPT model to use for generating the README. Default is "gpt-3.5-turbo".',
+    )
     return parser.parse_args()
 
 
@@ -64,7 +70,7 @@ def prompt_summary(**kwargs):
         **kwargs, human_language=constants.envs['human_language']
     )
     response = openai.ChatCompletion.create(
-        model="gpt-3.5-turbo",
+        model=kwargs['model'],
         messages=construct_prompt(final_system, final_prompt),
         temperature=0,
     )
@@ -77,9 +83,9 @@ def main():
     setup_env(args)
     local_path = envs['root_path']
     if os.path.isfile(local_path):
-        summaries = file_summary(local_path)
+        summaries = file_summary(local_path, args.model)
     else:
-        summaries = dir_summary(local_path)
+        summaries = dir_summary(local_path, args.model)
     end_env(args)
 
     console.rule("Generating README")
@@ -88,6 +94,7 @@ def main():
         module_summaries=summaries['summary'],
         path=relative_module(local_path),
         user_demand=args.demand,
+        model=args.model,
     )
     console.print(Markdown(readme))
     with open(args.out, 'w') as f:

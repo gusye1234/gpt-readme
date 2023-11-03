@@ -19,7 +19,7 @@ def prompt_summary(**kwargs):
     final_prompt = MODULE_PROMPT.format(**kwargs)
     final_system = SYSTEM_PROMPT.format(**kwargs, human_language=envs['human_language'])
     response = openai.ChatCompletion.create(
-        model="gpt-3.5-turbo",
+        model=kwargs['model'],
         messages=construct_prompt(final_system, final_prompt),
         temperature=0,
         stream=True,
@@ -36,7 +36,7 @@ def prompt_summary(**kwargs):
     return output
 
 
-def run_recursive_summarize(path):
+def run_recursive_summarize(path, model):
     paths = sorted(list(os.listdir(path)))
     sub_file_summaries = {}
     sub_module_summaries = {}
@@ -46,12 +46,12 @@ def run_recursive_summarize(path):
         if os.path.isfile(real_path):
             if ignore_file(real_path):
                 continue
-            result = file_summary(real_path)
-            sub_file_summaries[relative_module(real_path)] = result["summary"]
+            result = file_summary(real_path, model)
+            sub_file_summaries[real_path] = result["content"]
             total_languages.add(result["language"])
         elif not ignore_dir(real_path):
-            result = dir_summary(real_path)
-            if result["summary"] == "":
+            result = dir_summary(real_path, model)
+            if result["content"] == "":
                 continue
             sub_module_summaries[relative_module(real_path)] = result["summary"]
             total_languages.add(result["language"])
@@ -80,7 +80,8 @@ def run_recursive_summarize(path):
             file_summaries=file_summaries,
             module_summaries=module_summaries,
             max_length=300,
-            path=module,
+            path=path,
+            model=model,
         )
         dir_result = {"summary": summary, "language": language}
     return dir_result

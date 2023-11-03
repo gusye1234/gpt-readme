@@ -49,7 +49,7 @@ Once installed, you can use the `gpt-readme` command directly in the command lin
 The `gpt-readme` command-line tool provides various options to customize the README generation process. Here is an example usage:
 
 ```
-gpt-readme --path ./code --exts py,java --language english --demand "No false summary is allowed" --out ./readme.md --cache 1 --agree
+gpt-readme --path ./code --exts py,java --language english --demand "No false summary is allowed" --out ./readme.md --cache 1 --agree --model gpt-3.5-turbo
 ```
 
 The available command-line options include:
@@ -61,6 +61,7 @@ The available command-line options include:
 - `--out`: The output path for the generated README file.
 - `--cache`: Caching options for improved performance.
 - `--agree`: Agreement to send code to OpenAI.
+- `--model`: Specifies the model to use for generating README files. The default model is `gpt-3.5-turbo`. See the [OpenAI API Model documentation](https://platform.openai.com/docs/models/overview) for more information about the available models.
 
 ## Features
 

@@ -22,7 +22,7 @@ def prompt_summary(**kwargs):
     final_prompt = FILE_PROMPT.format(**kwargs)
     final_system = SYSTEM_PROMPT.format(**kwargs, human_language=envs['human_language'])
     response = openai.ChatCompletion.create(
-        model="gpt-3.5-turbo",
+        model=kwargs['model'],
         messages=construct_prompt(final_system, final_prompt),
         temperature=0,
         stream=True,
@@ -43,12 +43,12 @@ def prompt_summary(**kwargs):
     return output
 
 
-def file_summary(file_path):
+def file_summary(file_path, model):
     module = relative_module(file_path)
     console.print(f"[bold blue]FILE[/bold blue] {module}")
     content = "".join(get_file_content(file_path)).strip()
     language = get_language(file_path)
     summary = prompt_summary(
-        language=language, code=content, max_length=200, path=module
+        language=language, code=content, max_length=200, path=module, model=model
     )
     return {"summary": summary, "language": language}
