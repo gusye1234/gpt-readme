@@ -1,6 +1,7 @@
 import os
 import openai
 import argparse
+import asyncio
 from rich.markdown import Markdown
 from .constants import readme_header, console, envs
 from . import constants
@@ -53,6 +54,7 @@ def parse_args():
     )
     parser.add_argument(
         "--agree",
+        action="store_true",
         help='If you are OK to send your code to OpenAI',
     )
     return parser.parse_args()
@@ -77,9 +79,9 @@ def main():
     setup_env(args)
     local_path = envs['root_path']
     if os.path.isfile(local_path):
-        summaries = file_summary(local_path)
+        summaries = asyncio.run(file_summary(local_path))
     else:
-        summaries = dir_summary(local_path)
+        summaries = asyncio.run(dir_summary(local_path))
     end_env(args)
 
     console.rule("Generating README")
