@@ -17,7 +17,7 @@ from .prompts import MODULE_PROMPT, SYSTEM_PROMPT
 
 async def prompt_summary(**kwargs):
     final_prompt = MODULE_PROMPT.format(**kwargs)
-    final_system = SYSTEM_PROMPT.format(**kwargs, human_language=envs['human_language'])
+    final_system = SYSTEM_PROMPT.format(**kwargs)
     response = await openai.ChatCompletion.acreate(
         model="gpt-3.5-turbo",
         messages=construct_prompt(final_system, final_prompt),

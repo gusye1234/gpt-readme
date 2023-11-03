@@ -61,10 +61,10 @@ def parse_args():
 
 
 def prompt_summary(**kwargs):
-    final_prompt = FINAL_PROMPT.format(**kwargs)
-    final_system = SYSTEM_PROMPT.format(
+    final_prompt = FINAL_PROMPT.format(
         **kwargs, human_language=constants.envs['human_language']
     )
+    final_system = SYSTEM_PROMPT.format(**kwargs)
     response = openai.ChatCompletion.create(
         model="gpt-3.5-turbo",
         messages=construct_prompt(final_system, final_prompt),

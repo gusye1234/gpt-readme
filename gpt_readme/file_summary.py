@@ -18,7 +18,7 @@ async def prompt_summary(**kwargs):
         if file_cache is not None and file_cache["hash"] == hash_content(content):
             return file_cache["summary"]
     final_prompt = FILE_PROMPT.format(**kwargs)
-    final_system = SYSTEM_PROMPT.format(**kwargs, human_language=envs['human_language'])
+    final_system = SYSTEM_PROMPT.format(**kwargs)
     response = await openai.ChatCompletion.acreate(
         model="gpt-3.5-turbo",
         messages=construct_prompt(final_system, final_prompt),
