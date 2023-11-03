@@ -20,7 +20,7 @@ async def prompt_summary(**kwargs):
     final_prompt = FILE_PROMPT.format(**kwargs)
     final_system = SYSTEM_PROMPT.format(**kwargs)
     response = await openai.ChatCompletion.acreate(
-        model="gpt-3.5-turbo",
+        model=envs['gpt_model'],
         messages=construct_prompt(final_system, final_prompt),
         temperature=0,
     )

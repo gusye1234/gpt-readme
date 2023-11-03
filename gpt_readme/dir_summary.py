@@ -19,7 +19,7 @@ async def prompt_summary(**kwargs):
     final_prompt = MODULE_PROMPT.format(**kwargs)
     final_system = SYSTEM_PROMPT.format(**kwargs)
     response = await openai.ChatCompletion.acreate(
-        model="gpt-3.5-turbo",
+        model=envs['gpt_model'],
         messages=construct_prompt(final_system, final_prompt),
         temperature=0,
     )
@@ -85,7 +85,7 @@ async def run_recursive_summarize(path):
             language=language,
             file_summaries=file_summaries,
             module_summaries=module_summaries,
-            max_length=400,
+            max_length=500,
             path=module,
         )
         dir_result = {"summary": summary, "language": language}

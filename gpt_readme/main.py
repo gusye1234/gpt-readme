@@ -3,7 +3,7 @@ import openai
 import argparse
 import asyncio
 from rich.markdown import Markdown
-from .constants import readme_header, console, envs
+from .constants import readme_header, console, envs, DEFAULT_ARGS
 from . import constants
 from .utils import construct_prompt, end_env, setup_env, relative_module
 from .dir_summary import dir_summary
@@ -19,42 +19,48 @@ def parse_args():
     parser.add_argument(
         "--path",
         type=str,
-        default="./",
+        default=DEFAULT_ARGS['path'],
         help='The local path for your code repo/file',
     )
     parser.add_argument(
         "--exts",
         type=str,
-        default="py,cpp",
+        default=DEFAULT_ARGS['exts'],
         help='Select your code extension name, split by comma, e.g. py,cpp',
     )
     parser.add_argument(
         "--language",
         type=str,
-        default="english",
+        default=DEFAULT_ARGS['language'],
+        help='Select your readme language',
+    )
+    parser.add_argument(
+        "--model",
+        type=str,
+        default=DEFAULT_ARGS['model'],
         help='Select your readme language',
     )
     parser.add_argument(
         "--demand",
         type=str,
-        default="No false summary is allowed",
+        default=DEFAULT_ARGS['demand'],
         help='Additional requires for the gpt-readme',
     )
     parser.add_argument(
         "--out",
         type=str,
-        default="./readme.md",
+        default=DEFAULT_ARGS['out'],
         help='Select where your readme file should be saved',
     )
     parser.add_argument(
         "--cache",
         type=int,
-        default=1,
+        default=DEFAULT_ARGS['cache'],
         help='Cache the summary of the code, to speed up the generation of next time. It will leave a .gpt-readme.json file under the path. Set 0 to disable it',
     )
     parser.add_argument(
         "--agree",
-        action="store_true",
+        action='store_true',
         help='If you are OK to send your code to OpenAI',
     )
     return parser.parse_args()
@@ -66,7 +72,7 @@ def prompt_summary(**kwargs):
     )
     final_system = SYSTEM_PROMPT.format(**kwargs)
     response = openai.ChatCompletion.create(
-        model="gpt-3.5-turbo",
+        model=envs['gpt_model'],
         messages=construct_prompt(final_system, final_prompt),
         temperature=0,
     )

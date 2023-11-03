@@ -21,6 +21,7 @@ def setup_env(args):
     local_path = os.path.relpath(args.path)
     constants.envs['human_language'] = args.language
     constants.envs['root_path'] = local_path
+    constants.envs['gpt_model'] = args.model
     if args.cache:
         constants.envs['cache'] = get_cache_config(local_path)
     for ext in args.exts.split(","):
