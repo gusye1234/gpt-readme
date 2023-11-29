@@ -73,7 +73,7 @@ async def run_recursive_summarize(path):
         }
     elif len(sub_file_summaries) == 0 and len(sub_module_summaries) == 1:
         dir_result = {
-            "summary": list(sub_file_summaries.values())[0],
+            "summary": list(sub_module_summaries.values())[0],
             "language": language,
         }
     else:
