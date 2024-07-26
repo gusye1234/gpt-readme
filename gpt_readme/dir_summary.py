@@ -13,17 +13,19 @@ from .utils import (
 from .constants import console, envs
 from .file_summary import file_summary
 from .prompts import MODULE_PROMPT, SYSTEM_PROMPT
+from .llm import openai_complete
 
 
 async def prompt_summary(**kwargs):
     final_prompt = MODULE_PROMPT.format(**kwargs)
     final_system = SYSTEM_PROMPT.format(**kwargs)
-    response = await openai.ChatCompletion.acreate(
-        model=envs['gpt_model'],
-        messages=construct_prompt(final_system, final_prompt),
-        temperature=0,
+    response = await openai_complete(
+        model=envs["gpt_model"],
+        prompt=final_prompt,
+        system_prompt=final_system,
+        temperature=0.1,
     )
-    output = response["choices"][0]["message"]["content"]
+    output = response.strip()
     return output
 
 
@@ -36,6 +38,7 @@ async def run_recursive_summarize(path):
     file_paths = []
     dir_tasks = []
     dir_paths = []
+
     for entity in paths:
         real_path = os.path.join(path, entity)
         if os.path.isfile(real_path):
@@ -52,9 +55,14 @@ async def run_recursive_summarize(path):
             # total_languages.add(result["language"])
     if (len(file_tasks) + len(dir_tasks)) == 0:
         return {"summary": "", "language": ""}
+    if (len(file_tasks) + len(dir_tasks)) > envs["max_dir_entity"]:
+        console.log(f"Skipping {path} due to entity limit")
+        return {"summary": "", "language": ""}
+
     results = await asyncio.gather(
         asyncio.gather(*file_tasks), asyncio.gather(*dir_tasks)
     )
+
     file_results = results[0]
     dir_results = results[1]
     for i in range(len(file_results)):
@@ -78,7 +86,6 @@ async def run_recursive_summarize(path):
         }
     else:
         module = relative_module(path)
-        console.print(f"[bold green]DIR[/bold green] {module}")
         file_summaries = construct_summary_pair(sub_file_summaries)
         module_summaries = construct_summary_pair(sub_module_summaries)
         summary = await prompt_summary(
@@ -94,7 +101,10 @@ async def run_recursive_summarize(path):
 
 async def dir_summary(path):
     module = relative_module(path)
-    console.print(f"[bold green]DIR[/bold green] {module}")
+    if ignore_dir(path):
+        print(path)
+        return {"summary": "", "language": ""}
+    console.log(f"  DIR  {module} summary... ")
 
     if envs["cache"] is not None:
         dir_cache = envs["cache"].get(module, None)
@@ -102,15 +112,15 @@ async def dir_summary(path):
             dir_result = dict(
                 language=dir_cache["language"], summary=dir_cache["summary"]
             )
-            console.rule(f"✓ {module}")
+            console.log(f"[bold green]✓ DIR [/bold green] {module} done")
             return dir_result
     dir_result = await run_recursive_summarize(path)
 
-    if envs["cache"] is not None and dir_result['summary'] != "":
+    if envs["cache"] is not None and dir_result["summary"] != "":
         envs["cache"][module] = {}
-        envs["cache"][module]["summary"] = dir_result['summary']
-        envs["cache"][module]["language"] = dir_result['language']
+        envs["cache"][module]["summary"] = dir_result["summary"]
+        envs["cache"][module]["language"] = dir_result["language"]
         envs["cache"][module]["hash"] = hash_dir(path)
 
-    console.rule(f"✓ {module}")
+    console.log(f"[bold green]✓ DIR [/bold green] {module} done")
     return dir_result

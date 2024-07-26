@@ -1,11 +1,13 @@
 import os
 import json
 import hashlib
-import openai
-from getpass import getpass
+import inspect
+import asyncio
+from functools import wraps
 from rich.prompt import Confirm
 from . import constants
 from .constants import scan_exts, ext2language, console
+from gitignore_parser import parse_gitignore
 
 
 def setup_env(args):
@@ -16,14 +18,21 @@ def setup_env(args):
         )
         if not is_openai_ok:
             exit(0)
-    if os.environ.get('OPENAI_API_KEY', None) is None:
-        openai.api_key = getpass("Your OpenAI API key: ")
     local_path = os.path.relpath(args.path)
-    constants.envs['human_language'] = args.language
-    constants.envs['root_path'] = local_path
-    constants.envs['gpt_model'] = args.model
+    abs_path = os.path.abspath(args.path)
+    constants.envs["human_language"] = args.language
+    constants.envs["root_path"] = local_path
+    constants.envs["gpt_model"] = args.model
+    constants.envs["max_dir_entity"] = args.max_dir_entity
     if args.cache:
-        constants.envs['cache'] = get_cache_config(local_path)
+        constants.envs["cache"] = get_cache_config(local_path)
+
+    constants.envs["gitignore_matcher"] = None
+    if os.path.exists(os.path.join(abs_path, ".gitignore")):
+        console.log("Found .gitignore file")
+        constants.envs["gitignore_matcher"] = parse_gitignore(
+            os.path.join(abs_path, ".gitignore")
+        )
     for ext in args.exts.split(","):
         ext = ext.strip()
         if not ext:
@@ -43,7 +52,7 @@ def end_env(args):
 
 
 def generate_end(chunk):
-    if chunk['choices'][0]['finish_reason'] != None:
+    if chunk["choices"][0]["finish_reason"] != None:
         return True
 
 
@@ -73,7 +82,7 @@ def set_cache_config(path, cache):
         cache_path = os.path.join(os.path.dirname(path), ".gpt-readme.json")
     else:
         cache_path = os.path.join(path, ".gpt-readme.json")
-    with open(cache_path, 'w') as f:
+    with open(cache_path, "w") as f:
         json.dump(cache, f)
 
 
@@ -104,15 +113,21 @@ def get_language(path):
 
 
 def ignore_dir(path):
-    path = os.path.basename(path)
-    if path.startswith("."):
-        return True
-    if path.startswith("__"):
+    abs_path = os.path.abspath(path)
+    if constants.envs["gitignore_matcher"] is not None:
+        if constants.envs["gitignore_matcher"](abs_path):
+            return True
+    path = os.path.basename(path).strip()
+    if path.startswith(".") and path.strip(".") != "":
         return True
     return False
 
 
 def ignore_file(path):
+    abs_path = os.path.abspath(path)
+    if constants.envs["gitignore_matcher"] is not None:
+        if constants.envs["gitignore_matcher"](abs_path):
+            return True
     name = os.path.basename(path)
     if name.startswith("."):
         return True
@@ -137,3 +152,29 @@ def construct_summary_pair(pairs: dict):
         summary = f"# {key}\n{value}\n\n"
         res += summary
     return res
+
+
+def limit_async_func_call(max_size=8, wait_after_seconds=0.01):
+    """Add restriction of maximum async calling times for a async func"""
+
+    def final_decro(func):
+        assert inspect.iscoroutinefunction(func), "func must be a coroutine function"
+        current_running = 0
+
+        @wraps(func)
+        async def wait_func(*args, **kwargs):
+            nonlocal current_running
+            while True:
+                if current_running < max_size:
+                    current_running += 1
+                    break
+                await asyncio.sleep(wait_after_seconds)
+            try:
+                result = await func(*args, **kwargs)
+            finally:
+                current_running -= 1
+            return result
+
+        return wait_func
+
+    return final_decro

@@ -9,6 +9,7 @@ from .utils import construct_prompt, end_env, setup_env, relative_module
 from .dir_summary import dir_summary
 from .file_summary import file_summary
 from .prompts import FINAL_PROMPT, SYSTEM_PROMPT
+from .llm import openai_complete
 
 
 def parse_args():
@@ -27,6 +28,12 @@ def parse_args():
         type=str,
         default=DEFAULT_ARGS["exts"],
         help="Select your code extension name, split by comma, e.g. py,cpp",
+    )
+    parser.add_argument(
+        "--max_dir_entity",
+        type=int,
+        default=DEFAULT_ARGS["max_dir_entity"],
+        help="Ignore those dir that has more than max_dir_entity files/dirs",
     )
     parser.add_argument(
         "--language",
@@ -71,12 +78,15 @@ def prompt_summary(**kwargs):
         **kwargs, human_language=constants.envs["human_language"]
     )
     final_system = SYSTEM_PROMPT.format(**kwargs)
-    response = openai.ChatCompletion.create(
-        model=envs["gpt_model"],
-        messages=construct_prompt(final_system, final_prompt),
-        temperature=0,
+    response = asyncio.run(
+        openai_complete(
+            model=envs["gpt_model"],
+            prompt=final_prompt,
+            system_prompt=final_system,
+            temperature=0,
+        )
     )
-    return response["choices"][0]["message"]["content"]
+    return response.strip()
 
 
 def main():
@@ -97,7 +107,7 @@ def main():
         path=relative_module(local_path),
         user_demand=args.demand,
     )
-    console.print(Markdown(readme))
+    console.log(Markdown(readme))
     with open(args.out, "w") as f:
         f.write(readme_header(args))
         f.write(readme)
